@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script>
+            var promiseCount = 0;
+
+            function testPromise() {
+                
+                var thisPromiseCount = ++promiseCount;
+
+                var log = document.getElementById('log');
+                log.insertAdjacentHTML('beforeend', thisPromiseCount + ') Запуск (запуск синхронного кода)');
+
+                // Создаём промис, возвращающее 'result' (по истечении 3-х секунд)
+                var p1 = new Promise(
+                    // Функция разрешения позволяет завершить успешно или
+                    // отклонить промис
+                    function(resolve, reject) {
+                        log.insertAdjacentHTML('beforeend', thisPromiseCount + ') Запуск промиса (запуск асинхронного кода)');
+                        // Это всего лишь пример асинхронности
+                        window.setTimeout(
+                            function() {
+                            // Промис исполнен!
+                            resolve(thisPromiseCount)
+                            }, Math.random() * 2000 + 1000);
+                });
+
+                // Указываем, что сделать с исполненным промисом
+                p1.then(
+                    // Записываем в протокол
+                    function(val) { log.insertAdjacentHTML('beforeend', val + ') Промис исполнен (асинхронный код завершён)'); }
+                );
+
+                log.insertAdjacentHTML('beforeend', thisPromiseCount + ') Промис создан (синхронный код завершён)');
+            };
+        </script>
+    </head>
+    <body>
+        <button class="btn1" onclick="testPromise()">Создать Promise!</button>
+        
+        <h4>Логирование Promise</h4>
+        <p id="log"></p>
+    </body>
+</html>
